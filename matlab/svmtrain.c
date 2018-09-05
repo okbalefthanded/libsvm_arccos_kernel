@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 #include "svm.h"
@@ -216,8 +216,8 @@ int parse_command_line(int nrhs, const mxArray *prhs[], char *model_file_name)
 				double N_tmp[80];
                 //while (true)
                 while (1)
-				{
-                
+				{               
+					
 					N_tmp[param.L++] = atof(argv[i++]);
             		
 					if (i>=argc || (strlen(argv[i])>1 && isalpha(argv[i][1])))
@@ -228,11 +228,11 @@ int parse_command_line(int nrhs, const mxArray *prhs[], char *model_file_name)
             	}				
 				// param.N = new double[param.L];
 				param.N = Malloc(double, param.L);
-                memcpy(param.N, N_tmp, param.L*sizeof(double));
+                memcpy(param.N, N_tmp, param.L*sizeof(double));				
 				break;
 				}
 			default:
-				mexPrintf("Unknown option -%c\n", argv[i-1][1]);
+				mexPrintf("Unknown option -%f\n", argv[i-1][1]);
 				return 1;
 		}
 	}

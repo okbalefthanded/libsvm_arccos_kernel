@@ -2734,7 +2734,14 @@ int svm_save_model(const char *model_file_name, const svm_model *model)
 		fprintf(fp,"coef0 %.17g\n", param.coef0);
 
 	if(param.kernel_type == ARCCOS)
-		fprintf(fp, "N %0.17g\n", param.N);	
+		fprintf(fp,"L %d\n", param.L);
+	if(param.kernel_type == ARCCOS)
+        {
+		fprintf(fp,"N");
+		for(int i=0; i<param.L; i++)
+		    fprintf(fp," %g", param.N[i]);
+		fprintf(fp, "\n");
+        }
 
 	int nr_class = model->nr_class;
 	int l = model->l;

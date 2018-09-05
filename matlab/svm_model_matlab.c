@@ -38,13 +38,24 @@ const char *model_to_matlab_structure(mxArray *plhs[], int num_of_feature, struc
 	rhs = (mxArray **)mxMalloc(sizeof(mxArray *)*NUM_OF_RETURN_FIELD);
 
 	// Parameters
-	rhs[out_id] = mxCreateDoubleMatrix(5, 1, mxREAL);
+	// rhs[out_id] = mxCreateDoubleMatrix(5, 1, mxREAL);
+	int ct = 0;
+	rhs[out_id] = mxCreateDoubleMatrix(9, 1, mxREAL);
 	ptr = mxGetPr(rhs[out_id]);
 	ptr[0] = model->param.svm_type;
 	ptr[1] = model->param.kernel_type;
 	ptr[2] = model->param.degree;
 	ptr[3] = model->param.gamma;
 	ptr[4] = model->param.coef0;
+	ptr[5] = model->param.L;
+	for (int i = 6; i < model->param.L + 6; i++)
+	{
+		ptr[i] = model->param.N[ct];
+		++ct;
+	}
+	//ptr[6] = model->param.N;
+	//ptr[8] = model->param.N;
+	//ptr[9] = model->param.N;
 	out_id++;
 
 	// nr_class
@@ -237,12 +248,22 @@ struct svm_model *matlab_matrix_to_model(const mxArray *matlab_struct, const cha
 	model->nSV = NULL;
 	model->free_sv = 1; // XXX
 
+	int ct = 0;
+	double b;
 	ptr = mxGetPr(rhs[id]);
 	model->param.svm_type = (int)ptr[0];
 	model->param.kernel_type  = (int)ptr[1];
 	model->param.degree	  = (int)ptr[2];
 	model->param.gamma	  = ptr[3];
 	model->param.coef0	  = ptr[4];
+	model->param.L		  = (int) ptr[5];
+	model->param.N = Malloc(double, model->param.L);
+	for(int idx=6; idx < model->param.L+6 ; idx++)
+		{
+			model->param.N[ct] = ptr[idx];
+			
+			++ct;
+		}
 	id++;
 
 	ptr = mxGetPr(rhs[id]);
